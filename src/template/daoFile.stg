@@ -1,0 +1,77 @@
+daoDotHFile(className, superClassName, dotHHeaderComment) ::= <<
+<dotHHeaderComment>
+
+#import \<Foundation/Foundation.h>
+
+@class <className>;
+/**
+ *  <className>数据访问对象
+ */
+@interface <className>Dao : <superClassName>
+/**
+ *  创建表
+ *
+ *  @return 成功或失败
+ */
++ (int)createTable;
+/**
+ *  保存<className>对象到数据库
+ *
+ *  @param obj <className>对象
+ *  @return 成功或失败
+ */
++ (int)save<className>:(<className> *)obj;
+/**
+ *  保存列表中的<className>对象到数据库
+ *
+ *  @param objList <className>对象列表
+ *  @return 成功或失败
+ */
++ (int)save<className>List:(NSArray *)objList;
+/**
+ *  删除<className>对象
+ *
+ *  @param pkValue 主键值
+ *  @return 成功或失败
+ */
++ (int)delete<className>WithPrimaryKeyValue:(NSString *)pkValue;
+/**
+ *  删除全部
+ *  @return 成功或失败
+ */
++ (int)deleteAll<className>;
+/**
+ *  获取<className>对象列表
+ *
+ *  @param offset 获取记录的起始位置
+ *  @param limit 获取记录的条数
+ *
+ *  @return <className>对象列表
+ */
++ (NSMutableArray *)fetch<className>ListWithOffset:(NSInteger)offset limit:(NSInteger)limit;
+
+@end
+>>
+
+daoDotMFile(className, dotMHeaderComment, createTableImp, save, saveList, delete, deleteAll, fetch)  ::= <<
+<dotMHeaderComment>
+
+#import "<className>Dao.h"
+#import "<className>.h"
+#import "SqliteManager.h"
+
+@implementation <className>Dao
+<createTableImp>
+
+<save>
+
+<saveList>
+
+<delete>
+
+<deleteAll>
+
+<fetch>
+
+@end
+>>

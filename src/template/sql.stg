@@ -1,0 +1,70 @@
+createTableImp(tableName, fields) ::= <<
++ (int)createTable {
+	NSString *sql = @"create table if not exists <tableName> (<fields;separator=",">)";
+    return [SqliteManager sqlite3ExecCommand:sql];
+}
+>>
+
+field(fieldName, isPrimaryKey) ::= <<
+<fieldName> text<if(isPrimaryKey)> primary key<endif>
+>>
+
+save(tableName, className, dicSetValues) ::= <<
++ (int)save<className>:(<className> *)obj
+{
+    NSMutableDictionary *recordDic = [NSMutableDictionary dictionary];
+    <dicSetValues; separator="\n">
+   return [SqliteManager writeAllRecord:@[recordDic] databaseTableName:@"<tableName>" userIdentify:[GlobalPathMacro getUserIdentify]];
+}
+>>
+
+dicSetValue(fieldName) ::= <<
+[recordDic setValue:obj.<fieldName> forKey:@"<fieldName>"];
+>>
+
+saveList(tableName, className, dicSetValues) ::= <<
++ (int)save<className>List:(NSArray *)objList
+{
+    NSMutableArray *recordList = [NSMutableArray new];
+    for (<className> *obj in objList) {
+    	NSMutableDictionary *recordDic = [NSMutableDictionary dictionary];
+    	<dicSetValues; separator="\n">
+    	[recordList addObject:recordDic];
+    }
+    return [SqliteManager writeAllRecord:recordList databaseTableName:@"<tableName>" userIdentify:[GlobalPathMacro getUserIdentify]];
+}
+>>
+
+delete(tableName, className, pkName) ::= <<
++ (int)delete<className>WithPrimaryKeyValue:(NSString *)pkValue
+{
+    NSString *strSql = [NSString stringWithFormat:@"delete from <tableName> where <pkName>='%@'", pkValue];
+    return [SqliteManager sqlite3ExecCommand:strSql];
+}
+>>
+
+deleteAll(tableName, className) ::= <<
++ (int)deleteAll<className>
+{
+    NSString *strSql = @"delete from <tableName>";
+    return [SqliteManager sqlite3ExecCommand:strSql];
+}
+>>
+
+objField(fieldName) ::= <<obj.<fieldName> = record[@"<fieldName>"];>>
+
+fetch(tableName, className, objFields) ::= <<
++ (NSMutableArray *)fetch<className>ListWithOffset:(NSInteger)offset limit:(NSInteger)limit {
+	NSMutableArray *objArray = [NSMutableArray array];
+    NSString *sql = [NSString stringWithFormat:@"select * from <tableName> limit %@ offset %@", @(offset), @(limit)]; 
+    NSMutableArray *recordList= [SqliteManager getRecordsWithSql:sql];
+    if (recordList.count > 0) {
+        for (NSDictionary *record in recordList) {
+            <className> *obj = [<className> new];
+            <objFields; separator="\n">
+            [objArray addObject:obj];
+        }
+    } 
+    return objArray;
+}
+>>

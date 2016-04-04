@@ -1,0 +1,68 @@
+dotHFile(className, superClassName, dotHHeaderComment, properties) ::= <<
+<dotHHeaderComment>
+
+#import "HttpReqBase.h"
+
+/**
+ *  参考wiki:
+ */
+ @interface <className> : HttpReqBase
+<properties; separator="\n">
+/**
+ *  发送请求
+ *
+ *  @param successBlock 请求成功回调
+ *  @param failureBlock 请求失败回调
+ */
+- (void)sendWithSuccessBlock:(SuccessBlock)successBlock failureBlock:(FailureBlock)failureBlock;
+@end
+>>
+
+dicSetValue(fieldName) ::= <<
+[dic setValue:_<fieldName> forKey:@"<fieldName>"];
+>>
+
+mustParam(fieldName) ::= <<
+_<fieldName>
+>>
+
+dotMFile(className, dotMHeaderComment, url, mustParams, dicSetValues) ::= <<
+<dotMHeaderComment>
+
+#import "<className>.h"
+#import "GlobalKeyMacro.h"
+#import "HttpRequestFactory.h"
+#import "HttpSessionClient.h"
+#import "HttpRequestFactory.h"
+
+@implementation <className>
+
+- (NSString *)relativeURLPath {
+    return [NSString stringWithFormat:@"%@<url>?userStr=", [HttpRequestFactory prefixUrl]];
+}
+
+- (NSDictionary*)allParams {
+    if (<mustParams; separator=" && ">) {
+        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+        <dicSetValues; separator="\n">
+        return dic;
+    } else {
+        return nil;
+    }
+}
+
+- (void)sendWithSuccessBlock:(SuccessBlock)successBlock failureBlock:(FailureBlock)failureBlock {
+    self.params = [self allParams];
+    if (self.params) {
+    	self.successBlock = successBlock;
+        self.failureBlock = failureBlock;
+        self.requestMethod = REQUEST_METHOD_POST;
+        [[HttpSessionClient instance] requestWithRequest:self];
+    }
+}
+
+@end
+>>
+
+
+
