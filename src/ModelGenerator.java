@@ -12,9 +12,12 @@ public class ModelGenerator {
 	String className;
 	String projectName;
 	String basePath;
+	STGroup sqlGroup;
 	void generateFile() {
 		if (dataList == null || className == null || projectName == null)
 			return;
+		String fileContent = Utils.getFileContent(basePath+"/template/sql.stg");
+		sqlGroup = new STGroupString(fileContent);
 		ST dotHFileST = getDotHFileST();
 		ST dotMFileST = getDotMFileST();
 //		System.out.println(dotHFileST.render());
@@ -22,7 +25,7 @@ public class ModelGenerator {
 		Utils.writeFileContent(basePath+"output/"+className+".h", dotHFileST.render());
 		Utils.writeFileContent(basePath+"output/"+className+".m", dotMFileST.render());
 	}
-	
+
 	private ST getDotHFileST() {
 		String fileContent = Utils.getFileContent(basePath+"/template/modelDotHFile.st");
 		STGroup group = new STGroupString(fileContent);
@@ -37,7 +40,7 @@ public class ModelGenerator {
 		}
 		return dotHFile;
 	}
-	
+
 	private ST getPropertyST(Data data) {
 		String fileContent = Utils.getFileContent(basePath+"/template/property.st");
 		STGroup group = new STGroupString(fileContent);
@@ -48,7 +51,7 @@ public class ModelGenerator {
 		property.add("comment", data.comment);
 		return property;
 	}
-	
+
 	private ST getDotMFileST() {
 		String fileContent = Utils.getFileContent(basePath+"/template/modelDotMFile.st");
 		STGroup group = new STGroupString(fileContent);
@@ -57,7 +60,19 @@ public class ModelGenerator {
 		//set className, dotMHeaderComment
 		dotMFile.add("className", className);
 		dotMFile.add("dotMHeaderComment", headerComment);
+		
+		for (Data data : dataList) {
+			dotMFile.add("objFields", getObjField(data));
+		}
 		return dotMFile;
 	}
-	 
+	
+	private ST getObjField(Data data) {
+		//fieldName
+		ST st = sqlGroup.getInstanceOf("objField");
+		st.add("fieldName", data.key);
+		return st;
+	}
+	
+
 }

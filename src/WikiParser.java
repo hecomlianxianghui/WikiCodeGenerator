@@ -8,7 +8,7 @@ import org.jsoup.select.Elements;
 
 /**
  * 对wiki的html文件进行解析，获取需要的数据
- * 
+ *
  * @author lianxianghui
  */
 class WikiParser {
@@ -20,11 +20,12 @@ class WikiParser {
 	String encode;
 	Document document;
 	Element body;
+	boolean hasDataType = true;
 	void parseHtml(String htmlContent) {
 		if (encode == null)
 			encode = "UTF-8";
 		document = Jsoup.parse(htmlContent);
-		if (document == null) 
+		if (document == null)
 			return;
 		body = document.body();
 		if (body == null)
@@ -33,33 +34,38 @@ class WikiParser {
 		parseParams();
 		parseDatas();
 	}
-	
+
 	void parseUrl() {
 		Elements pTagElements = body.getElementsByTag("p");
 		for (Element element : pTagElements) {
 			String text = element.text();
-			if (text.contains("服务地址：")) {
-				String url = text.replace("服务地址：", "");
-				if (url.contains("{authUrl}")) {
-					url = url.replace("{authUrl}", "");
-					prefixUrlType = 0;
-				} else if (url.contains("{commonUrl}")) {
-					url = url.replace("{commonUrl}", "");
-					prefixUrlType = 1;
-				}
-				serverUrl = url;
-				return;
+			String url = null;
+			if (text.contains("服务地址:")) {
+				url = text.replace("服务地址:", "");
+			} else if (text.contains("服务地址：")) {
+				url = text.replace("服务地址：", "");
+			} else {
+				continue;
 			}
+			if (url.contains("{authUrl}")) {
+				url = url.replace("{authUrl}", "");
+				prefixUrlType = 0;
+			} else if (url.contains("{commonUrl}")) {
+				url = url.replace("{commonUrl}", "");
+				prefixUrlType = 1;
+			}
+			serverUrl = url;
+			return;
 		}
 	}
-	
+
 	void parseParams() {
 		Element paramTable = body.getElementById("params");
 		if (paramTable == null)
 			return;
 		int i = 0;
 		for (Element tr : paramTable.getElementsByTag("tr")) {
-			if (i == 0) {//header 
+			if (i == 0) {//header
 				i++;
 				continue;
 			}
@@ -89,16 +95,16 @@ class WikiParser {
 			}
 		}
 	}
-	
+
 	void parseDatas() {
 		Element dataTable = body.getElementById("datas");
 		if (dataTable == null)
 			return;
 		int i = 0;
 		for (Element tr : dataTable.getElementsByTag("tr")) {
-			if (i == 0) {//header 
+			if (i == 0) {//header
 				i++;
-				continue;	
+				continue;
 			}
 			int dataDescriptionIndex = 0;
 			Data currentData = new Data();
@@ -109,14 +115,23 @@ class WikiParser {
 					currentData.key = text;
 					break;
 				case 1:
-					currentData.comment = text;
-					dataList.add(currentData);
+					if (hasDataType) {
+
+					} else {
+						currentData.comment = text;
+					}
 					break;
+				case 2:
+					if (hasDataType) {
+						currentData.comment = text;
+					}
+				break;
 				default:
 					break;
 				}
 				dataDescriptionIndex++;
 			}
+			dataList.add(currentData);
 		}
 	}
 

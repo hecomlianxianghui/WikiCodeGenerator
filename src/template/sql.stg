@@ -57,7 +57,7 @@ fetch(tableName, className, objFields) ::= <<
 + (NSMutableArray *)fetch<className>ListWithOffset:(NSInteger)offset limit:(NSInteger)limit {
 	NSMutableArray *objArray = [NSMutableArray array];
     NSString *sql = [NSString stringWithFormat:@"select * from <tableName> limit %@ offset %@", @(offset), @(limit)]; 
-    NSMutableArray *recordList= [SqliteManager getRecordsWithSql:sql];
+    NSMutableArray *recordList = [SqliteManager getRecordsWithSql:sql];
     if (recordList.count > 0) {
         for (NSDictionary *record in recordList) {
             <className> *obj = [<className> new];
