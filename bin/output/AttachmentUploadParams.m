@@ -11,19 +11,18 @@
 
 @implementation AttachmentUploadParams
 
-+ (AttachmentUploadParams *)modleFromDic:(NSDictionary *)Dic {
++ (AttachmentUploadParams *)modleFromDic:(NSDictionary *)dic {
 	AttachmentUploadParams *obj = [AttachmentUploadParams new];
-    obj.uploadType = record[@"uploadType"];
-    obj.bucketName = record[@"bucketName"];
-    obj.endPoint = record[@"endPoint"];
-    obj.imgEndPoint = record[@"imgEndPoint"];
-    obj.objectKey = record[@"objectKey"];
-    obj.accessKeyId = record[@"accessKeyId"];
-    obj.accessKeySecret = record[@"accessKeySecret"];
-    obj.securityToken = record[@"securityToken"];
-    obj.callbackUrl = record[@"callbackUrl"];
-    obj.callbackHost = record[@"callbackHost"];
-    obj.callbackHost = record[@"callbackHost"];
+    obj.uploadType = dic[@"uploadType"];
+    obj.bucketName = dic[@"bucketName"];
+    obj.endPoint = dic[@"endPoint"];
+    obj.imgEndPoint = dic[@"imgEndPoint"];
+    obj.objectKey = dic[@"objectKey"];
+    obj.accessKeyId = dic[@"accessKeyId"];
+    obj.accessKeySecret = dic[@"accessKeySecret"];
+    obj.securityToken = dic[@"securityToken"];
+    obj.callbackUrl = dic[@"callbackUrl"];
+    obj.callbackHost = dic[@"callbackHost"];
 }
 
 @end

@@ -53,11 +53,7 @@
  *  oss回调的host
  */
 @property (nonatomic) NSString *callbackHost;
-/**
- *  超时时间
- */
-@property (nonatomic) NSString *callbackHost;
 
-+ (AttachmentUploadParams *)modleFromDic:(NSDictionary *)Dic;
++ (AttachmentUploadParams *)modleFromDic:(NSDictionary *)dic;
 
 @end

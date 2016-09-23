@@ -13,7 +13,7 @@
 
 @implementation AttachmentUploadParamsDao
 + (int)createTable {
-	NSString *sql = @"create table if not exists AttachmentUploadParams (uploadType text primary key,bucketName text,endPoint text,imgEndPoint text,objectKey text,accessKeyId text,accessKeySecret text,securityToken text,callbackUrl text,callbackHost text,callbackHost text)";
+	NSString *sql = @"create table if not exists AttachmentUploadParams (uploadType text primary key,bucketName text,endPoint text,imgEndPoint text,objectKey text,accessKeyId text,accessKeySecret text,securityToken text,callbackUrl text,callbackHost text)";
     return [SqliteManager sqlite3ExecCommand:sql];
 }
 
@@ -29,7 +29,6 @@
     [recordDic setValue:obj.accessKeySecret forKey:@"accessKeySecret"];
     [recordDic setValue:obj.securityToken forKey:@"securityToken"];
     [recordDic setValue:obj.callbackUrl forKey:@"callbackUrl"];
-    [recordDic setValue:obj.callbackHost forKey:@"callbackHost"];
     [recordDic setValue:obj.callbackHost forKey:@"callbackHost"];
    return [SqliteManager writeAllRecord:@[recordDic] databaseTableName:@"AttachmentUploadParams" userIdentify:[GlobalPathMacro getUserIdentify]];
 }
@@ -48,7 +47,6 @@
     	[recordDic setValue:obj.accessKeySecret forKey:@"accessKeySecret"];
     	[recordDic setValue:obj.securityToken forKey:@"securityToken"];
     	[recordDic setValue:obj.callbackUrl forKey:@"callbackUrl"];
-    	[recordDic setValue:obj.callbackHost forKey:@"callbackHost"];
     	[recordDic setValue:obj.callbackHost forKey:@"callbackHost"];
     	[recordList addObject:recordDic];
     }
@@ -83,7 +81,6 @@
             obj.accessKeySecret = record[@"accessKeySecret"];
             obj.securityToken = record[@"securityToken"];
             obj.callbackUrl = record[@"callbackUrl"];
-            obj.callbackHost = record[@"callbackHost"];
             obj.callbackHost = record[@"callbackHost"];
             [objArray addObject:obj];
         }

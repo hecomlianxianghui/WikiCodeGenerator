@@ -12,12 +12,12 @@ public class ModelGenerator {
 	String className;
 	String projectName;
 	String basePath;
-	STGroup sqlGroup;
+	STGroup dotMFileSTGroup;
 	void generateFile() {
 		if (dataList == null || className == null || projectName == null)
 			return;
-		String fileContent = Utils.getFileContent(basePath+"/template/sql.stg");
-		sqlGroup = new STGroupString(fileContent);
+		String fileContent = Utils.getFileContent(basePath+"/template/modelDotMFile.stg");
+		dotMFileSTGroup = new STGroupString(fileContent);
 		ST dotHFileST = getDotHFileST();
 		ST dotMFileST = getDotMFileST();
 //		System.out.println(dotHFileST.render());
@@ -53,9 +53,7 @@ public class ModelGenerator {
 	}
 
 	private ST getDotMFileST() {
-		String fileContent = Utils.getFileContent(basePath+"/template/modelDotMFile.st");
-		STGroup group = new STGroupString(fileContent);
-		ST dotMFile = group.getInstanceOf("modelDotMFile");
+		ST dotMFile = dotMFileSTGroup.getInstanceOf("modelDotMFile");
 		ST headerComment = Utils.getHeaderCommentST(false, className, projectName);
 		//set className, dotMHeaderComment
 		dotMFile.add("className", className);
@@ -69,7 +67,7 @@ public class ModelGenerator {
 	
 	private ST getObjField(Data data) {
 		//fieldName
-		ST st = sqlGroup.getInstanceOf("objField");
+		ST st = dotMFileSTGroup.getInstanceOf("objField");
 		st.add("fieldName", data.key);
 		return st;
 	}
