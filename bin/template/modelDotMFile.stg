@@ -1,0 +1,17 @@
+modelDotMFile(className, dotMHeaderComment, objFields) ::= <<
+<dotMHeaderComment>
+
+#import "<className>.h"
+
+@implementation <className>
+
++ (<className> *)modleFromDic:(NSDictionary *)dic {
+	<className> *obj = [<className> new];
+    <objFields; separator="\n">
+    return obj;
+}
+
+@end
+>>
+
+objField(fieldName) ::= <<obj.<fieldName> = dic[@"<fieldName>"];>>

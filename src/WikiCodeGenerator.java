@@ -69,7 +69,7 @@ public class WikiCodeGenerator {
 			daoGenerator.modelClassName = className;
 			daoGenerator.generateFile();
 		}
-		if (paramList.size() > 0 && requestClassName != null) {
+		if (requestClassName != null) {
 			RequestGenerator requestGenerator = new RequestGenerator();
 			requestGenerator.basePath = basePath;
 			requestGenerator.className = requestClassName;

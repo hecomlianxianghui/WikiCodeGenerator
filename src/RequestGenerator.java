@@ -16,7 +16,7 @@ public class RequestGenerator {
 	STGroup group;
 	String basePath;
 	void generateFile() {
-		if (paramList == null || className == null || projectName == null)
+		if (className == null || projectName == null)
 			return;
 		String fileContent = Utils.getFileContent(basePath+"/template/requestFile.stg");
 		group = new STGroupString(fileContent);
